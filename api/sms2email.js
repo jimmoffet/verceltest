@@ -15,17 +15,15 @@ module.exports = (req, res) => {
         text: req.body.Body,
     };
 
-    console.error('Sending email from' + `${fromAddress}` +', to '+ `${process.env.TO_EMAIL_ADDRESS}`)
-
     // Send the email
     sgMail.send(email)
         .then(response => {
-            console.log('Email sent from' + `${fromAddress}` +', to '+ `${process.env.TO_EMAIL_ADDRESS}`)
+            console.log('Email sent from ' + `${fromAddress}` +', to '+ `${process.env.TO_EMAIL_ADDRESS}`)
             res.setHeader('Content-Type', 'text/xml');
             res.status(200).send(`${fromAddress}` +', to '+ `${process.env.TO_EMAIL_ADDRESS}` + "<Response></Response >"); //Make sure we return correctly.
         })
         .catch((error) => {
-          console.error('Email sent from' + `${fromAddress}` +', to '+ `${process.env.TO_EMAIL_ADDRESS}`)
+          console.error('Email failed to send from ' + `${fromAddress}` +', to '+ `${process.env.TO_EMAIL_ADDRESS}`)
           console.error(error)
           res.status(200).send(`Error is ${error}`)
         })
