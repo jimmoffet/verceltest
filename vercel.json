@@ -1,5 +1,5 @@
 {
-  "name": "verceltest",
+  "name": "jimmoffet-verceltest",
   "version": 2,
   "env": {
         "TWILIO_ACCOUNT_SID": "@twilio_account_sid",
