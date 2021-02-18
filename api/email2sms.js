@@ -4,7 +4,7 @@ const addrs = require("email-addresses");
 const sgMail = require('@sendgrid/mail');
 const twilio = require('twilio');
 
-module.exports = async (req, res) => { 
+module.exports = async (req, res) => {
     const client = twilio(process.env.TWILIO_ACCOUNT_SID,process.env.TWILIO_AUTH_TOKEN);
     await util.promisify(multer().any())(req, res);
 
@@ -12,6 +12,9 @@ module.exports = async (req, res) => {
     const to = req.body.to;
     const subject = req.body.subject;
     const body = req.body.text;
+
+    console.log('Email body is: \n' + `${body}`)
+    
 
     //Using email-addresses library to extract email details.
     const toAddress = addrs.parseOneAddress(to);
