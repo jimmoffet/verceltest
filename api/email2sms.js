@@ -9,12 +9,15 @@ module.exports = async (req, res) => {
     await util.promisify(multer().any())(req, res);
 
     const from = req.body.from;
+    console.log('Email from is: \n' + `${from}`)
     const to = req.body.to;
+    console.log('Email to is: \n' + `${to}`)
     const subject = req.body.subject;
+    console.log('Email subject is: \n' + `${subject}`)
+    // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
     const body = req.body.text;
-
     console.log('Email body is: \n' + `${body}`)
-    
+
 
     //Using email-addresses library to extract email details.
     const toAddress = addrs.parseOneAddress(to);
