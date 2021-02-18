@@ -15,7 +15,7 @@ module.exports = (req, res) => {
         text: req.body.Body,
     };
 
-    console.log('Sending email from' + `@${process.env.EMAIL_DOMAIN}` +', to '+ `@${process.env.TO_EMAIL_ADDRESS}`)
+    console.error('Sending email from' + `@${process.env.EMAIL_DOMAIN}` +', to '+ `@${process.env.TO_EMAIL_ADDRESS}`)
 
     // Send the email
     sgMail.send(email)
@@ -25,6 +25,7 @@ module.exports = (req, res) => {
             res.status(200).send(`@${process.env.EMAIL_DOMAIN}` +', to '+ `@${process.env.TO_EMAIL_ADDRESS}` + "<Response></Response >"); //Make sure we return correctly.
         })
         .catch((error) => {
+          console.error('Email sent from' + `@${process.env.EMAIL_DOMAIN}` +', to '+ `@${process.env.TO_EMAIL_ADDRESS}`)
           console.error(error)
           res.status(200).send(`Error is ${error}`)
         })
