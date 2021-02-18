@@ -18,7 +18,12 @@ module.exports = (req, res) => {
     // Send the email
     sgMail.send(email)
         .then(response => {
+            console.log('Email sent from' + `@${process.env.EMAIL_DOMAIN}` +', to '+ `@${process.env.TO_EMAIL_ADDRESS}`)
             res.setHeader('Content-Type', 'text/xml');
             res.status(200).send("<Response></Response >"); //Make sure we return correctly.
+        })
+        .catch((error) => {
+          console.error(error)
+          res.status(200).send(`Error is ${error}`)
         })
 };
