@@ -32,7 +32,17 @@ module.exports = async (req, res) => {
 
     // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
     const rawBody = req.body.text;
-    console.log('Email body is: \n' + `${rawBody}`)
+    console.error('Email body is: \n' + `${rawBody}`)
+
+    const splitter = "This home has been listed for sale"
+    var newBody = rawBody.split(splitter)
+    // console.log(newBody[1])
+    var newBodyTwo = newBody[1].split("<")
+    // console.log(newBodyTwo[1])
+    var newBodyThree = newBodyTwo[1].split(">")
+    // console.log(newBodyThree[0])
+    var link = newBodyThree[0]
+    console.log('link is: \n' + `${link}`)
 
     const body = rawBody.substring(0,1500)
 
@@ -40,7 +50,7 @@ module.exports = async (req, res) => {
     client.messages.create({
         to: `+${toName}`,
         from: process.env.TWILIO_PHONE_NUMBER,
-        body: `MomBot here with a new house!\n${body}`
+        body: `MomBot here with a new house!\n${link}`
     }).then(msg => {
         console.log(msg)
         res.status(200).send(msg.sid);
