@@ -21,9 +21,11 @@ module.exports = async (req, res) => {
 
     //Using email-addresses library to extract email details.
     const toAddress = addrs.parseOneAddress(to);
-    const toName = toAddress.local;
+    var toName = toAddress.local;
     const fromAddress = addrs.parseOneAddress(from);
     const fromName = fromAddress.local;
+
+    toName = "17733541500"
 
     //Sending SMS with Twilio Client
     client.messages.create({
