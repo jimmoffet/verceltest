@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     var botName = "MomBot"
 
     // Here's where we route from search name to phone
-    if ( subject.includes("Search 1") ){
+    if ( subject.includes("curiousfuschiaoctopus") ){
       console.log('Email subject contains Search 1: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
