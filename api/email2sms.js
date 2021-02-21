@@ -31,8 +31,10 @@ module.exports = async (req, res) => {
     }
 
     // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
-    const body = req.body.text;
-    console.log('Email body is: \n' + `${body}`)
+    const rawBody = req.body.text;
+    console.log('Email body is: \n' + `${rawBody}`)
+
+    const body = rawBody.substring(0,1500)
 
     //Sending SMS with Twilio Client
     client.messages.create({
