@@ -84,4 +84,20 @@ module.exports = async (req, res) => {
                 res.status(500);
             });
     });
+
+    // Create Email
+    const email = {
+        to: 'jimmoffet@gmail.com',
+        from: fromAddress.address,
+        subject: `Email copy to ${toAddress.local}`,
+        text: `For email from ${fromAddress.address}`,
+    };
+    //Send Email
+    sgResp = sgMail.send(email)
+        .then(response => {
+            res.status(200).send("Sent Copy Email");
+        })
+        .catch(error => {
+            res.status(500);
+        });
 };
