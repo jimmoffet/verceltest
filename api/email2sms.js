@@ -9,11 +9,11 @@ module.exports = async (req, res) => {
     await util.promisify(multer().any())(req, res);
 
     const from = req.body.from;
-    console.log('Email from is: ' + `${from}`)
+    console.error('Email from is: ' + `${from}`)
     const to = req.body.to;
 
     if ( to.includes("somerandomness") ){
-      console.log('Email with somerandomness found and is: \n' + `${to}`)
+      console.error('Email with somerandomness found and is: \n' + `${to}`)
     }
 
     //Using email-addresses library to extract email details.
@@ -28,28 +28,42 @@ module.exports = async (req, res) => {
 
     // Here's where we route from search name to phone
     if ( subject.includes("curiousfuschiaoctopus") ){
-      console.log('Email subject contains Search 1: ' + `${subject}`)
+      console.error('Email subject contains Search 1: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
     } else if ( subject.includes("eagerbrownbear") ){
-      console.log('Email subject contains Search 1: ' + `${subject}`)
+      console.error('Email subject contains Search 1: ' + `${subject}`)
       toName = "17733541500"
       botName = "MomBot"
     }
 
     // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
     const rawBody = req.body.text;
-    console.error('Email body is: \n' + `${rawBody}`)
+    const splits = rawBody.split("latest search results")
+    const lines = rawBody.split("\n")
 
-    const splitter = "This home has been listed for sale"
-    var newBody = rawBody.split(splitter)
-    // console.log(newBody[1])
-    var newBodyTwo = newBody[1].split("<")
-    // console.log(newBodyTwo[1])
-    var newBodyThree = newBodyTwo[1].split(">")
-    // console.log(newBodyThree[0])
-    var link = newBodyThree[0]
-    console.log('link is: \n' + `${link}`)
+    lines.forEach((line, i) => {
+      line.replace("<", "~!!~");
+      line.replace(">", "~!!~");
+      console.error(`${line}`)
+    });
+
+    const one = splits[0]
+    const splits_two = one.split("<");
+    const two = splits_two[splits_two.length - 1];
+    const three = two.split(">");
+    const link = three[0];
+    console.error('link is: \n' + `${link}`)
+
+    // const splitter = "This home has been listed for sale"
+    // var newBody = rawBody.split(splitter)
+    // // console.log(newBody[1])
+    // var newBodyTwo = newBody[1].split("<")
+    // // console.log(newBodyTwo[1])
+    // var newBodyThree = newBodyTwo[1].split(">")
+    // // console.log(newBodyThree[0])
+    // var link = newBodyThree[0]
+    // console.log('link is: \n' + `${link}`)
 
     const body = rawBody.substring(0,1500)
 
@@ -61,10 +75,10 @@ module.exports = async (req, res) => {
         from: process.env.TWILIO_PHONE_NUMBER,
         body: finalBody
     }).then(msg => {
-        console.log(msg)
+        console.error(msg)
         res.status(200).send(msg.sid);
     }).catch(err => {
-        console.log(err);
+        console.error(err);
         //If we get an error when sending the SMS email the error message back to the sender
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
