@@ -24,10 +24,17 @@ module.exports = async (req, res) => {
 
     const subject = req.body.subject;
 
+    var botName = "MomBot"
+
     // Here's where we route from search name to phone
     if ( subject.includes("Search 1") ){
       console.log('Email subject contains Search 1: ' + `${subject}`)
       toName = "17733541500"
+      botName = "JimBot"
+    } else if ( subject.includes("eagerbrownbear") ){
+      console.log('Email subject contains Search 1: ' + `${subject}`)
+      toName = "17733541500"
+      botName = "MomBot"
     }
 
     // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
@@ -46,11 +53,13 @@ module.exports = async (req, res) => {
 
     const body = rawBody.substring(0,1500)
 
+    const finalBody = botName+` here with a new house for you!\n${link}`
+
     //Sending SMS with Twilio Client
     client.messages.create({
         to: `+${toName}`,
         from: process.env.TWILIO_PHONE_NUMBER,
-        body: `MomBot here with a new house!\n${link}`
+        body: finalBody
     }).then(msg => {
         console.log(msg)
         res.status(200).send(msg.sid);
