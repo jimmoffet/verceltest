@@ -29,11 +29,11 @@ module.exports = async (req, res) => {
 
     // Here's where we route from search name to phone
     if ( subject.includes("curiousfuschiaoctopus") ){
-      console.error('Email subject contains Search 1: ' + `${subject}`)
+      console.error('Email subject contains curiousfuschiaoctopus: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
     } else if ( subject.includes("eagerbrownbear") ){
-      console.error('Email subject contains Search 1: ' + `${subject}`)
+      console.error('Email subject contains eagerbrownbear: ' + `${subject}`)
       toName = "17733541500"
       botName = "MomBot"
     } else {
@@ -54,71 +54,68 @@ module.exports = async (req, res) => {
           });
     }
 
-    // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
-    const rawBody = req.body.text;
-    const splits = rawBody.split("latest search results")
-    const lines = rawBody.split("\n")
+    if (botName != 'FailBot') {
+      const rawBody = req.body.text;
+      const splits = rawBody.split("latest search results")
+      const lines = rawBody.split("\n")
+      lines.forEach((line, i) => {
+        line.replace("<", "~!!~");
+        line.replace(">", "~!!~");
+        console.error(`${line}`)
+      });
+      const one = splits[0]
+      const splits_two = one.split("<");
+      const two = splits_two[splits_two.length - 1];
+      const three = two.split(">");
+      const link = three[0];
+      console.error('link is: \n' + `${link}`)
+      const body = rawBody.substring(0,1500)
+      const finalBody = botName+` here with a new house for you!\n${link}`
+      //Sending SMS with Twilio Client
+      client.messages.create({
+          to: `+${toName}`,
+          from: process.env.TWILIO_PHONE_NUMBER,
+          body: finalBody
+      }).then(msg => {
+          console.error(msg)
+          // Create Email
+          const email = {
+              to: 'jimmoffet@gmail.com',
+              from: toAddress.address,
+              subject: `Email copy to ${toAddress.local}`,
+              text: `For email from ${fromAddress.address}`,
+          };
+          //Send Email
+          sgResp = sgMail.send(email)
+              .then(response => {
+                  res.status(200).send("Sent Success Email");
+              })
+              .catch(error => {
+                  res.status(500);
+              });
+          res.status(200).send(msg.sid);
+      }).catch(err => {
+          console.error(err);
+          //If we get an error when sending the SMS email the error message back to the sender
+          sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    lines.forEach((line, i) => {
-      line.replace("<", "~!!~");
-      line.replace(">", "~!!~");
-      console.error(`${line}`)
-    });
+          // Create Email
+          const email = {
+              to: 'jimmoffet@gmail.com',
+              from: toAddress.address,
+              subject: `Error Sending SMS to ${toAddress.local}`,
+              text: `${err}\n For email from ${fromAddress.address}`,
+          };
+          //Send Email
+          sgResp = sgMail.send(email)
+              .then(response => {
+                  res.status(200).send("Sent Error Email");
+              })
+              .catch(error => {
+                  res.status(500);
+              });
+      });
+  }
 
-    const one = splits[0]
-    const splits_two = one.split("<");
-    const two = splits_two[splits_two.length - 1];
-    const three = two.split(">");
-    const link = three[0];
-    console.error('link is: \n' + `${link}`)
 
-    const body = rawBody.substring(0,1500)
-
-    const finalBody = botName+` here with a new house for you!\n${link}`
-
-    //Sending SMS with Twilio Client
-    client.messages.create({
-        to: `+${toName}`,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        body: finalBody
-    }).then(msg => {
-        console.error(msg)
-        res.status(200).send(msg.sid);
-    }).catch(err => {
-        console.error(err);
-        //If we get an error when sending the SMS email the error message back to the sender
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-        // Create Email
-        const email = {
-            to: fromAddress.address,
-            from: toAddress.address,
-            subject: `Error Sending SMS to ${toAddress.local}`,
-            text: `${err}\n For email from ${fromAddress.address}`,
-        };
-        //Send Email
-        sgResp = sgMail.send(email)
-            .then(response => {
-                res.status(200).send("Sent Error Email");
-            })
-            .catch(error => {
-                res.status(500);
-            });
-    });
-
-    // Create Email
-    const email = {
-        to: 'jimmoffet@gmail.com',
-        from: toAddress.address,
-        subject: `Email copy to ${toAddress.local}`,
-        text: `For email from ${fromAddress.address}`,
-    };
-    //Send Email
-    sgResp = sgMail.send(email)
-        .then(response => {
-            res.status(200).send("Sent Copy Email");
-        })
-        .catch(error => {
-            res.status(500);
-        });
 };
