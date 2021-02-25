@@ -36,6 +36,22 @@ module.exports = async (req, res) => {
       console.error('Email subject contains Search 1: ' + `${subject}`)
       toName = "17733541500"
       botName = "MomBot"
+    } else {
+      // Create Email
+      const email = {
+          to: 'jimmoffet@gmail.com',
+          from: toAddress.address,
+          subject: `Failed email copy to ${toAddress.local}`,
+          text: `For failed email (no matched search) from ${fromAddress.address}.\n${subject}\n${req.body.text}`,
+      };
+      //Send Email
+      sgResp = sgMail.send(email)
+          .then(response => {
+              res.status(200).send("Sent Copy Email");
+          })
+          .catch(error => {
+              res.status(500);
+          });
     }
 
     // if subject contains 'Search 1', then parse and route to the correct phone, send log message somewhere
@@ -55,16 +71,6 @@ module.exports = async (req, res) => {
     const three = two.split(">");
     const link = three[0];
     console.error('link is: \n' + `${link}`)
-
-    // const splitter = "This home has been listed for sale"
-    // var newBody = rawBody.split(splitter)
-    // // console.log(newBody[1])
-    // var newBodyTwo = newBody[1].split("<")
-    // // console.log(newBodyTwo[1])
-    // var newBodyThree = newBodyTwo[1].split(">")
-    // // console.log(newBodyThree[0])
-    // var link = newBodyThree[0]
-    // console.log('link is: \n' + `${link}`)
 
     const body = rawBody.substring(0,1500)
 
@@ -103,7 +109,7 @@ module.exports = async (req, res) => {
     // Create Email
     const email = {
         to: 'jimmoffet@gmail.com',
-        from: fromAddress.address,
+        from: toAddress.address,
         subject: `Email copy to ${toAddress.local}`,
         text: `For email from ${fromAddress.address}`,
     };
