@@ -36,13 +36,13 @@ module.exports = async (req, res) => {
       console.error('Email subject contains curiousfuschiaoctopus: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
-      if (subject.includes("Price Drop")) {priceDrop = "Price Drop!"}
+      if (subject.includes("Price Drop")) {priceDrop = "Price Drop: "}
     } else if ( subject.includes("eagerbrownbear") ){
       console.error('Email subject contains eagerbrownbear: ' + `${subject}`)
       toName = "17733541500"
       botName = "MomBot"
       if (subject.includes("Price Drop")) {
-        priceDrop = "Price Drop!"
+        priceDrop = "Price Drop: "
       }
     } else {
       // Create Email
@@ -76,12 +76,14 @@ module.exports = async (req, res) => {
       // const link = three[0];
 
       var link = "Sorry, we seem to be experiencing a technical issue"
+      var address = ""
 
-      const splits = rawBody.split("<")
+      const splits = rawBody.split("https://")
       splits.forEach((item, i) => {
         if ( item.includes("zpid_target") ) {
-          const target = item.split(">")
-          link = target[0]
+          const target = item.split("\n")
+          link = "https://"+target[0] // should validate that the link works
+          address = target[1]
         }
       });
 
@@ -93,7 +95,7 @@ module.exports = async (req, res) => {
 
       console.error('link is: \n' + `${link}`)
       const body = link.substring(0,1500)
-      const finalBody = botName+` here with a new house for you!\n${priceDrop}\n${body}`
+      const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n${body}`
       //Sending SMS with Twilio Client
       client.messages.create({
           to: `+${toName}`,
@@ -104,19 +106,19 @@ module.exports = async (req, res) => {
           // Create Email
           const email = {
               to: 'jimmoffet@gmail.com',
-              from: toAddress.address,
+              from: 'vercelbot@parse.jamesdavidmoffet.com',
               subject: `Email copy to ${toAddress.local}`,
               text: `For email from ${fromAddress.address}.\n${priceDrop}\n${req.body.text}`,
           };
           //Send Email
           sgResp = sgMail.send(email)
               .then(response => {
-                  res.status(200).send("Sent Success Email");
+                  res.status(200).send(`Sent Success Email with sid: ${msg.sid}`);
               })
               .catch(error => {
-                  res.status(500);
+                  res.status(500).send(`Failed sending Email with sid: ${msg.sid}`);
               });
-          res.status(200).send(msg.sid);
+          // res.status(200).send(msg.sid);
       }).catch(err => {
           console.error(err);
           //If we get an error when sending the SMS email the error message back to the sender
@@ -125,7 +127,7 @@ module.exports = async (req, res) => {
           // Create Email
           const email = {
               to: 'jimmoffet@gmail.com',
-              from: toAddress.address,
+              from: 'vercelbot@parse.jamesdavidmoffet.com',
               subject: `Error Sending SMS to ${toAddress.local}`,
               text: `${err}\n For email from ${fromAddress.address}.\n${priceDrop}\n${req.body.text}`,
           };
