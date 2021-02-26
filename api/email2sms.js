@@ -29,16 +29,19 @@ module.exports = async (req, res) => {
 
     var botName = "FailBot"
     toName = "17733541500"
+    var priceDrop = ""
 
     // Here's where we route from search name to phone
     if ( subject.includes("curiousfuschiaoctopus") ){
       console.error('Email subject contains curiousfuschiaoctopus: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
+      if (subject.includes("Price Drop")) {priceDrop = "Price Drop!"}
     } else if ( subject.includes("eagerbrownbear") ){
       console.error('Email subject contains eagerbrownbear: ' + `${subject}`)
       toName = "17733541500"
       botName = "MomBot"
+      if (subject.includes("Price Drop")) {priceDrop = "Price Drop!"}
     } else {
       // Create Email
       const email = {
@@ -101,7 +104,7 @@ module.exports = async (req, res) => {
               to: 'jimmoffet@gmail.com',
               from: toAddress.address,
               subject: `Email copy to ${toAddress.local}`,
-              text: `For email from ${fromAddress.address}.\n\n${req.body.text}`,
+              text: `For email from ${fromAddress.address}.\n${priceDrop}\n${req.body.text}`,
           };
           //Send Email
           sgResp = sgMail.send(email)
