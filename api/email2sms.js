@@ -4,8 +4,11 @@ const addrs = require("email-addresses");
 const sgMail = require('@sendgrid/mail');
 const twilio = require('twilio');
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 module.exports = async (req, res) => {
     const client = twilio(process.env.TWILIO_ACCOUNT_SID,process.env.TWILIO_AUTH_TOKEN);
+
     await util.promisify(multer().any())(req, res);
 
     const from = req.body.from;
@@ -55,19 +58,34 @@ module.exports = async (req, res) => {
     }
 
     if (botName != 'FailBot') {
+
+      // we should split on https:// and then split each on >, take [0] and check if item includes "property-notifications"
+
       const rawBody = req.body.text;
-      const splits = rawBody.split("latest search results")
-      // const lines = rawBody.split("\n")
-      // lines.forEach((line, i) => {
-      //   line.replace("<", "~!!~");
-      //   line.replace(">", "~!!~");
-      //   console.error(`${line}`)
-      // });
-      const one = splits[0]
-      const splits_two = one.split("<");
-      const two = splits_two[splits_two.length - 1];
-      const three = two.split(">");
-      const link = three[0];
+
+      // const splits = rawBody.split("latest search results")
+      // const one = splits[0]
+      // const splits_two = one.split("<");
+      // const two = splits_two[splits_two.length - 1];
+      // const three = two.split(">");
+      // const link = three[0];
+
+      var link = "Sorry, we seem to be experiencing a technical issue"
+
+      const splits = rawBody.split("<")
+      splits.forEach((item, i) => {
+        if ( item.includes("zpid_target") ) {
+          const target = item.split(">")
+          link = target[0]
+        }
+      });
+
+      // const one = splits[0]
+      // const splits_two = one.split("<");
+      // const two = splits_two[splits_two.length - 1];
+      // const three = two.split(">");
+      // const link = three[0];
+
       console.error('link is: \n' + `${link}`)
       const body = link.substring(0,1500)
       const finalBody = botName+` here with a new house for you!\n${body}`
@@ -97,7 +115,7 @@ module.exports = async (req, res) => {
       }).catch(err => {
           console.error(err);
           //If we get an error when sending the SMS email the error message back to the sender
-          sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
           // Create Email
           const email = {
