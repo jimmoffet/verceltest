@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
       if (subject.includes("Price Drop")) {priceDrop = "Price Drop: "}
     } else if ( subject.includes("eagerbrownbear") ){
       console.error('Email subject contains eagerbrownbear: ' + `${subject}`)
-      toName = "17733541500"
+      toName = "12627979725"
       botName = "MomBot"
       if (subject.includes("Price Drop")) {
         priceDrop = "Price Drop: "
