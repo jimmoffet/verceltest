@@ -41,7 +41,9 @@ module.exports = async (req, res) => {
       console.error('Email subject contains eagerbrownbear: ' + `${subject}`)
       toName = "17733541500"
       botName = "MomBot"
-      if (subject.includes("Price Drop")) {priceDrop = "Price Drop!"}
+      if (subject.includes("Price Drop")) {
+        priceDrop = "Price Drop!"
+      }
     } else {
       // Create Email
       const email = {
@@ -91,7 +93,7 @@ module.exports = async (req, res) => {
 
       console.error('link is: \n' + `${link}`)
       const body = link.substring(0,1500)
-      const finalBody = botName+` here with a new house for you!\n${body}`
+      const finalBody = botName+` here with a new house for you!\n${priceDrop}\n${body}`
       //Sending SMS with Twilio Client
       client.messages.create({
           to: `+${toName}`,
@@ -125,7 +127,7 @@ module.exports = async (req, res) => {
               to: 'jimmoffet@gmail.com',
               from: toAddress.address,
               subject: `Error Sending SMS to ${toAddress.local}`,
-              text: `${err}\n For email from ${fromAddress.address}.\n\n${req.body.text}`,
+              text: `${err}\n For email from ${fromAddress.address}.\n${priceDrop}\n${req.body.text}`,
           };
           //Send Email
           sgResp = sgMail.send(email)
