@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
     console.error('Email from is: ' + `${from}`)
     const to = req.body.to;
 
-    if ( to.includes("somerandomness") ){
-      console.error('Email with somerandomness found and is: \n' + `${to}`)
-    }
+    // if ( to.includes("somerandomness") ){
+    //   console.error('Email with somerandomness found and is: \n' + `${to}`)
+    // }
 
     //Using email-addresses library to extract email details.
     const toAddress = addrs.parseOneAddress(to);
@@ -32,8 +32,8 @@ module.exports = async (req, res) => {
     var priceDrop = ""
 
     // Here's where we route from search name to phone
-    if ( subject.includes("curiousfuschiaoctopus") ){
-      console.error('Email subject contains curiousfuschiaoctopus: ' + `${subject}`)
+    if ( subject.includes("curiousfuschiaoctopus") || subject.includes("allpdx1200sqft500max" || subject.includes("alleastsidemultifamunder600" || subject.includes("jacksonparkduplexes") ){
+      console.error('Email subject contains jim trigger: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
       if (subject.includes("Price Drop")) {priceDrop = "Price Drop: "}
