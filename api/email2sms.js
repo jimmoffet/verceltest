@@ -68,7 +68,9 @@ module.exports = async (req, res) => {
       var link = "Sorry, we seem to be experiencing a technical issue"
       var address = ""
       var link_list = []
+      var deets_list = []
       var address_list = []
+      var deets = "no details available"
       var num_beds = 0
       var price = 0
       var sqft = 0
@@ -83,12 +85,14 @@ module.exports = async (req, res) => {
         if ( item.includes("zpid_target") ) {
           const target = item.split("\n");
           link_list.push("https://"+target[0]); // should validate that the link works
-          address_list.push(target[1]);
+          deets_list.push(target[1]);
+          address_list.push(target[2]);
         }
       });
 
       link = link_list[0]
       address = address_list[0]
+      deets = deets_list[0]
 
       // const splits_deets = rawBody.split("|")
       // splits_deets.forEach((item, i) => {
@@ -112,7 +116,7 @@ module.exports = async (req, res) => {
       // console.error('price is: \n' + `${price}`)
       // console.error('sqft is: \n' + `${sqft}`)
 
-      const body = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${link}`
+      const body = botName+` here with a new house for you!\n${address}\n${sqft}\n${link}`
       const finalBody = body.substring(0,1550)
       console.error('finalBody is: \n' + `${finalBody}`)
       //Sending SMS with Twilio Client
