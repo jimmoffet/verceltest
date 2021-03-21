@@ -67,21 +67,44 @@ module.exports = async (req, res) => {
       const rawBody = req.body.text;
       var link = "Sorry, we seem to be experiencing a technical issue"
       var address = ""
+      var link_list = []
+      var address_list = []
       var num_beds = 0
       var price = 0
       var sqft = 0
 
       const splits = rawBody.split("https://")
       splits.forEach((item, i) => {
+        // if ( item.includes("zpid_target") ) {
+        //   const target = item.split("\n");
+        //   link = "https://"+target[0]; // should validate that the link works
+        //   address = target[1];
+        // }
         if ( item.includes("zpid_target") ) {
           const target = item.split("\n");
-          link = "https://"+target[0]; // should validate that the link works
-          address = target[1];
-          break;
+          link_list.push("https://"+target[0]); // should validate that the link works
+          address_list.push(target[1]);
         }
       });
 
-      
+      link = link_list[0]
+      address = address_list[0]
+
+      // const splits_deets = rawBody.split("|")
+      // splits_deets.forEach((item, i) => {
+      //   if (i==0) {
+      //     let bed_splits = item.split(" bd ")
+      //     let raw_num = bed_splits[0]
+      //     num_beds = raw_num[raw_num.length -1]
+      //     let price_splits = item.split("$")
+      //     raw_price = price_splits[1].split(" ")
+      //     price = raw_price[0]
+      //   }
+      //   if (i==2) {
+      //     let sqft_splits = item.split(" sqft ")
+      //     sqft = sqft_splits[0]
+      //   }
+      // });
 
       // console.error('link is: \n' + `${link}`)
       // console.error('address is: \n' + `${address}`)
