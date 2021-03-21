@@ -93,7 +93,7 @@ module.exports = async (req, res) => {
       });
 
       link = link_list[0].trim()
-      address_splits = subject.split("Listing: ")[1].split(". Your ")[0]
+      address_splits = subject.split("Listing: ")[1].split(". Your ")
       address = address_splits[0].trim()
       deets = deets_list[0].trim()
 
@@ -119,7 +119,9 @@ module.exports = async (req, res) => {
       console.error('price is: \n' + `${price}`)
       console.error('sqft is: \n' + `${sqft}`)
 
-      const body = botName+` here with a new house for you!\n${address}\n${deets}\n${link}`
+      const details = `beds: ${num_beds}, price: ${price}, sqft: ${price}`
+
+      const body = botName+` here with a new house for you!\n${address}\n${deets}\n${details}\n${link}`
       const finalBody = body.substring(0,1550)
       console.error('finalBody is: \n' + `${finalBody}`)
       //Sending SMS with Twilio Client
