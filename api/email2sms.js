@@ -92,31 +92,32 @@ module.exports = async (req, res) => {
         }
       });
 
-      link = link_list[0]
-      address_splits = subject.split("New Listing: ")
-      deets = deets_list[0]
+      link = link_list[0].trim()
+      address_splits = subject.split("Listing: ")[1].split(". Your ")[0]
+      address = address_splits[0].trim()
+      deets = deets_list[0].trim()
 
-      // const splits_deets = rawBody.split("|")
-      // splits_deets.forEach((item, i) => {
-      //   if (i==0) {
-      //     let bed_splits = item.split(" bd ")
-      //     let raw_num = bed_splits[0]
-      //     num_beds = raw_num[raw_num.length -1]
-      //     let price_splits = item.split("$")
-      //     raw_price = price_splits[1].split(" ")
-      //     price = raw_price[0]
-      //   }
-      //   if (i==2) {
-      //     let sqft_splits = item.split(" sqft ")
-      //     sqft = sqft_splits[0]
-      //   }
-      // });
+      const splits_deets = deets.split("|")
+      splits_deets.forEach((item, i) => {
+        if (i==0) {
+          let bed_splits = item.split(" bd ")
+          let raw_num = bed_splits[0]
+          num_beds = raw_num[raw_num.length -1]
+          let price_splits = item.split("$")
+          raw_price = price_splits[1].split(" ")
+          price = raw_price[0]
+        }
+        if (i==2) {
+          let sqft_splits = item.split(" sqft ")
+          sqft = sqft_splits[0]
+        }
+      });
 
-      // console.error('link is: \n' + `${link}`)
-      // console.error('address is: \n' + `${address}`)
-      // console.error('num_beds is: \n' + `${num_beds}`)
-      // console.error('price is: \n' + `${price}`)
-      // console.error('sqft is: \n' + `${sqft}`)
+      console.error('link is: \n' + `${link}`)
+      console.error('address is: \n' + `${address}`)
+      console.error('num_beds is: \n' + `${num_beds}`)
+      console.error('price is: \n' + `${price}`)
+      console.error('sqft is: \n' + `${sqft}`)
 
       const body = botName+` here with a new house for you!\n${address}\n${deets}\n${link}`
       const finalBody = body.substring(0,1550)
