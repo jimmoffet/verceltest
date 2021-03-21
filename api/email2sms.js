@@ -96,14 +96,16 @@ module.exports = async (req, res) => {
         }
       });
 
-      console.error('link is: \n' + `${link}`)
-      console.error('address is: \n' + `${address}`)
-      console.error('num_beds is: \n' + `${num_beds}`)
-      console.error('price is: \n' + `${price}`)
-      console.error('sqft is: \n' + `${sqft}`)
+      // console.error('link is: \n' + `${link}`)
+      // console.error('address is: \n' + `${address}`)
+      // console.error('num_beds is: \n' + `${num_beds}`)
+      // console.error('price is: \n' + `${price}`)
+      // console.error('sqft is: \n' + `${sqft}`)
 
-      const body = link.substring(0,1500)
-      const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${body}`
+
+      const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${link}`
+      const body = finalBody.substring(0,1550)
+      console.error('body is: \n' + `${body}`)
       //Sending SMS with Twilio Client
       client.messages.create({
           to: `+${toName}`,
