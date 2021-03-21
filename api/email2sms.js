@@ -82,11 +82,6 @@ module.exports = async (req, res) => {
 
       const splits_deets = rawBody.split("|")
       splits_deets.forEach((item, i) => {
-        if (item.includes("zpid_target") ) {
-          const target = item.split("\n")
-          link = "https://"+target[0] // should validate that the link works
-          address = target[1]
-        }
         if (i==0) {
           let bed_splits = item.split(" bd ")
           let raw_num = bed_splits[0]
@@ -99,10 +94,14 @@ module.exports = async (req, res) => {
           let sqft_splits = item.split(" sqft ")
           sqft = sqft_splits[0]
         }
-
       });
 
       console.error('link is: \n' + `${link}`)
+      console.error('address is: \n' + `${address}`)
+      console.error('num_beds is: \n' + `${num_beds}`)
+      console.error('price is: \n' + `${price}`)
+      console.error('sqft is: \n' + `${sqft}`)
+
       const body = link.substring(0,1500)
       const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${body}`
       //Sending SMS with Twilio Client
