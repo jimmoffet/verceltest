@@ -63,20 +63,13 @@ module.exports = async (req, res) => {
     }
 
     if (botName != 'FailBot') {
-
       // we should split on https:// and then split each on >, take [0] and check if item includes "property-notifications"
-
       const rawBody = req.body.text;
-
-      // const splits = rawBody.split("latest search results")
-      // const one = splits[0]
-      // const splits_two = one.split("<");
-      // const two = splits_two[splits_two.length - 1];
-      // const three = two.split(">");
-      // const link = three[0];
-
       var link = "Sorry, we seem to be experiencing a technical issue"
       var address = ""
+      var num_beds = 0
+      var price = 0
+      var sqft = 0
 
       const splits = rawBody.split("https://")
       splits.forEach((item, i) => {
@@ -87,15 +80,30 @@ module.exports = async (req, res) => {
         }
       });
 
-      // const one = splits[0]
-      // const splits_two = one.split("<");
-      // const two = splits_two[splits_two.length - 1];
-      // const three = two.split(">");
-      // const link = three[0];
+      const splits_deets = rawBody.split("|")
+      splits_deets.forEach((item, i) => {
+        if i==0 {
+          let bed_splits = item.split(" bd ")
+          let raw_num = bed_splits[0]
+          num_beds = raw_num[raw_num.length -1]
+          let price_splits = item.split("$")
+          raw_price = price_splits[1].split(" ")
+          price = raw_price[0]
+        }
+        if i==2 {
+          let sqft_splits = item.split(" sqft ")
+          sqft = sqft_splits[0]
+        }
+        if (item.includes("zpid_target") ) {
+          const target = item.split("\n")
+          link = "https://"+target[0] // should validate that the link works
+          address = target[1]
+        }
+      });
 
       console.error('link is: \n' + `${link}`)
       const body = link.substring(0,1500)
-      const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n${body}`
+      const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${body}`
       //Sending SMS with Twilio Client
       client.messages.create({
           to: `+${toName}`,
