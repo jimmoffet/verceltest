@@ -103,9 +103,9 @@ module.exports = async (req, res) => {
       // console.error('sqft is: \n' + `${sqft}`)
 
 
-      const finalBody = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${link}`
-      const body = finalBody.substring(0,1550)
-      console.error('body is: \n' + `${body}`)
+      const body = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${link}`
+      const finalBody = body.substring(0,1550)
+      console.error('finalBody is: \n' + `${finalBody}`)
       //Sending SMS with Twilio Client
       client.messages.create({
           to: `+${toName}`,
