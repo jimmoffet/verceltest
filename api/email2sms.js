@@ -82,7 +82,7 @@ module.exports = async (req, res) => {
 
       const splits_deets = rawBody.split("|")
       splits_deets.forEach((item, i) => {
-        if i==0 {
+        if (i==0) {
           let bed_splits = item.split(" bd ")
           let raw_num = bed_splits[0]
           num_beds = raw_num[raw_num.length -1]
@@ -90,7 +90,7 @@ module.exports = async (req, res) => {
           raw_price = price_splits[1].split(" ")
           price = raw_price[0]
         }
-        if i==2 {
+        if (i==2) {
           let sqft_splits = item.split(" sqft ")
           sqft = sqft_splits[0]
         }
