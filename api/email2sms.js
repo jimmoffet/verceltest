@@ -82,6 +82,11 @@ module.exports = async (req, res) => {
 
       const splits_deets = rawBody.split("|")
       splits_deets.forEach((item, i) => {
+        if (item.includes("zpid_target") ) {
+          const target = item.split("\n")
+          link = "https://"+target[0] // should validate that the link works
+          address = target[1]
+        }
         if (i==0) {
           let bed_splits = item.split(" bd ")
           let raw_num = bed_splits[0]
@@ -94,11 +99,7 @@ module.exports = async (req, res) => {
           let sqft_splits = item.split(" sqft ")
           sqft = sqft_splits[0]
         }
-        if (item.includes("zpid_target") ) {
-          const target = item.split("\n")
-          link = "https://"+target[0] // should validate that the link works
-          address = target[1]
-        }
+
       });
 
       console.error('link is: \n' + `${link}`)
