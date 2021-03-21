@@ -74,9 +74,10 @@ module.exports = async (req, res) => {
       const splits = rawBody.split("https://")
       splits.forEach((item, i) => {
         if ( item.includes("zpid_target") ) {
-          const target = item.split(">")
+          const target = item.split("\n")
           link = "https://"+target[0] // should validate that the link works
           address = target[1]
+          break
         }
       });
 
