@@ -84,14 +84,16 @@ module.exports = async (req, res) => {
         // }
         if ( item.includes("zpid_target") ) {
           const target = item.split("\n");
-          link_list.push("https://"+target[0]); // should validate that the link works
+          var raw_link = "https://"+target[0];
+          var clean_link = raw_link.replace(">","");
+          link_list.push(clean_link); // should validate that the link works
           deets_list.push(target[1]);
           address_list.push(target[2]);
         }
       });
 
       link = link_list[0]
-      address = address_list[0]
+      address_splits = subject.split("New Listing: ")
       deets = deets_list[0]
 
       // const splits_deets = rawBody.split("|")
