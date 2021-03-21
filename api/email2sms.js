@@ -74,7 +74,7 @@ module.exports = async (req, res) => {
       const splits = rawBody.split("https://")
       splits.forEach((item, i) => {
         if ( item.includes("zpid_target") ) {
-          const target = item.split("\n")
+          const target = item.split(">")
           link = "https://"+target[0] // should validate that the link works
           address = target[1]
         }
@@ -101,7 +101,6 @@ module.exports = async (req, res) => {
       // console.error('num_beds is: \n' + `${num_beds}`)
       // console.error('price is: \n' + `${price}`)
       // console.error('sqft is: \n' + `${sqft}`)
-
 
       const body = botName+` here with a new house for you!\n${priceDrop}${address}\n $${price} | ${num_beds} bdr | ${sqft} sqft \n${link}`
       const finalBody = body.substring(0,1550)
