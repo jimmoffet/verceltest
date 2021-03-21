@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     var priceDrop = ""
 
     // Here's where we route from search name to phone
-    if ( subject.includes("curiousfuschiaoctopus") || subject.includes("allpdx1200sqft500max" || subject.includes("alleastsidemultifamunder600" || subject.includes("jacksonparkduplexes") ){
+    if ( subject.includes("curiousfuschiaoctopus") || subject.includes("allpdx1200sqft500max") || subject.includes("alleastsidemultifamunder600") || subject.includes("jacksonparkduplexes") ){
       console.error('Email subject contains jim trigger: ' + `${subject}`)
       toName = "17733541500"
       botName = "JimBot"
